@@ -945,10 +945,7 @@ router.get('/', authentication, async (req, res) => {
 					data = await Report.find({ name: { $regex: keyword } }, null, {
 						skip,
 						limit,
-					})
-						.select('-content')
-						.sort({ date: -1 })
-						.allowDiskUse(true);
+					}).select('-content');
 					countDocs = await Report.countDocuments({
 						name: { $regex: keyword },
 					});
@@ -963,27 +960,18 @@ router.get('/', authentication, async (req, res) => {
 						},
 						null,
 						{ skip, limit }
-					)
-						.select('-content')
-						.sort({ date: -1 })
-						.allowDiskUse(true);
+					).select('-content');
 				} else {
 					data = await Report.find({ [field]: keyword }, null, {
 						skip,
 						limit,
-					})
-						.select('-content')
-						.sort({ date: -1 })
-						.allowDiskUse(true);
+					}).select('-content');
 					countDocs = await Report.countDocuments({ [field]: keyword });
 				}
 			} else {
-				data = await Report.find(null, null, { skip, limit })
-					.select('-content')
-					.sort({
-						date: -1,
-					})
-					.allowDiskUse(true);
+				data = await Report.find(null, null, { skip, limit }).select(
+					'-content'
+				);
 				countDocs = await Report.countDocuments();
 			}
 		} else {
@@ -993,10 +981,7 @@ router.get('/', authentication, async (req, res) => {
 						{ userId: req.user.id, name: { $regex: keyword } },
 						null,
 						{ skip, limit }
-					)
-						.select('-content')
-						.sort({ date: -1 })
-						.allowDiskUse(true);
+					).select('-content');
 					countDocs = await Report.countDocuments({
 						userId: req.user.id,
 						name: { $regex: keyword },
@@ -1013,19 +998,13 @@ router.get('/', authentication, async (req, res) => {
 						},
 						null,
 						{ skip, limit }
-					)
-						.select('-content')
-						.sort({ date: -1 })
-						.allowDiskUse(true);
+					).select('-content');
 				} else {
 					data = await Report.find(
 						{ userId: req.user.id, [field]: keyword },
 						null,
 						{ skip, limit }
-					)
-						.select('-content')
-						.sort({ date: -1 })
-						.allowDiskUse(true);
+					).select('-content');
 					countDocs = await Report.countDocuments({
 						userId: req.user.id,
 						[field]: keyword,
@@ -1035,10 +1014,7 @@ router.get('/', authentication, async (req, res) => {
 				data = await Report.find({ userId: req.user.id }, null, {
 					skip,
 					limit,
-				})
-					.select('-content')
-					.sort({ date: -1 })
-					.allowDiskUse(true);
+				}).select('-content');
 				countDocs = await Report.countDocuments({ userId: req.user.id });
 			}
 		}
