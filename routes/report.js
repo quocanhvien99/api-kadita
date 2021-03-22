@@ -17,6 +17,23 @@ router.post('/', authentication, async (req, res) => {
 
 	let result = congthuc(req.body.name, req.body.birthday);
 
+	//cau noi khat tam nhan cach truong hop 7
+	let caunoiktnc;
+	if (
+		(result.khattam.slice(-1)[0] == 8 && result.nhancach.slice(-1)[0] == 1) ||
+		(result.khattam.slice(-1)[0] == 1 && result.nhancach.slice(-1)[0] == 8)
+	) {
+		caunoiktnc = 81;
+	}
+	if (
+		(result.khattam.slice(-1)[0] == 9 && result.nhancach.slice(-1)[0] == 2) ||
+		(result.khattam.slice(-1)[0] == 2 && result.nhancach.slice(-1)[0] == 9)
+	) {
+		caunoiktnc = 92;
+	} else {
+		caunoiktnc = result.caunoi.khattamnhancach;
+	}
+
 	let content = await Promise.all([
 		Content.findOne({
 			key: dictKey[0].key,
@@ -41,7 +58,7 @@ router.post('/', authentication, async (req, res) => {
 		}),
 		Content.findOne({
 			key: dictKey[7].key,
-			number: result.caunoi.khattamnhancach,
+			number: caunoiktnc,
 		}),
 		Content.findOne({
 			key: dictKey[11].key,
@@ -543,7 +560,7 @@ giới. Số Khát tâm thể hiện bản sắc tâm hồn của bạn.
                 bạn trong mắt người khác.
                 </p>
                 <h2 style="text-align: center;">Số cầu nối: ${
-									content[6].number
+									caunoiktnc == 81 || caunoiktnc == 92 ? 7 : caunoiktnc
 								}</h2>
                 ${content[6].content}
                 </div>
