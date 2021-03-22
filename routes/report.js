@@ -24,14 +24,14 @@ router.post('/', authentication, async (req, res) => {
 		(result.khattam.slice(-1)[0] == 1 && result.nhancach.slice(-1)[0] == 8)
 	) {
 		caunoiktnc = 81;
+	} else {
+		caunoiktnc = result.caunoi.khattamnhancach;
 	}
 	if (
 		(result.khattam.slice(-1)[0] == 9 && result.nhancach.slice(-1)[0] == 2) ||
 		(result.khattam.slice(-1)[0] == 2 && result.nhancach.slice(-1)[0] == 9)
 	) {
 		caunoiktnc = 92;
-	} else {
-		caunoiktnc = result.caunoi.khattamnhancach;
 	}
 
 	let content = await Promise.all([
