@@ -779,10 +779,10 @@ giới. Số Khát tâm thể hiện bản sắc tâm hồn của bạn.
                 </p>
                 <div class="number" style="margin-top: 50px;">
                         <img src="file:///${projectRoot}/public/img/thachthuc/img.PNG">
-                        <div class="value" style="left: -80px; top: 4px;">${
+                        <div class="value" style="left: -80px; top: 3px;">${
 													content[16].number
 												}</div>
-                        <div class="value" style="left: 80px; top: 4px;">${
+                        <div class="value" style="left: 80px; top: 3px;">${
 													content[17].number
 												}</div>
                         <div class="value" style="top: 30px;">${
