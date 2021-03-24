@@ -124,6 +124,10 @@ router.post('/', authentication, async (req, res) => {
 			key: dictKey[29].key,
 			number: result.namcanhan[2].number.slice(-1)[0],
 		}),
+		Content.findOne({
+			key: dictKey[2].key,
+			number: result.truongthanh.slice(-1)[0],
+		}),
 	]);
 
 	// let checkMainNumber = async (x, key) => {
@@ -221,11 +225,22 @@ router.post('/', authentication, async (req, res) => {
     <html>
     <head>
         <style>
+            @font-face {
+                font-family: UTM;
+                src: url('file:///${projectRoot}/public/font/UTM.ttf');
+            }
+            @font-face {
+                font-family: UTMBold;
+                src: url('file:///${projectRoot}/public/font/UTMBold.ttf');
+            }
             @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,400&display=swap');
             html{zoom: ${process.env.SERVER_OS == 'linux' ? 0.75 : 1.0};}
             body {
                 margin: 0;
-                font-family: 'Roboto';
+                font-family: 'UTM';
+            }
+            body h1, h2 {
+                font-family: 'UTMBold';
             }
             body *:not(h2, .number) {
                 font-size: 12pt
@@ -235,11 +250,17 @@ router.post('/', authentication, async (req, res) => {
                 page-break-after: always;
             }
             .number {
+                text-align: center;
+            }
+            .number img {
+                width: 0.8in;
+            }
+            .number1 {
                 font-size: xx-large;
                 text-align: center;
                 position: relative;
             }
-            .number > .value {
+            .number1 > .value {
                 position: absolute;
                 width: 100%;
                 top: 30%;
@@ -251,6 +272,7 @@ router.post('/', authentication, async (req, res) => {
                 line-height: 1;
             }
             p {
+                text-align: justify;
                 text-indent: 0.2in;
                 margin: 5px;
                 line-height: 1.5;
@@ -321,18 +343,20 @@ router.post('/', authentication, async (req, res) => {
                     <h1 style="text-transform: uppercase; text-align: center;">Mục lục báo cáo</h1>
                     <p>• Thông tin khách hàng</p>
                     <p>• Quy trình báo cáo Thần số học</p>
-                    <p style="margin: 0.4in 0; font-weight: bold;">I. LA BÀN ĐỊNH VỊ CUỘC ĐỜI</p>
+                    <p style="margin: 0.4in 0; font-family: 'UTMBold';">I. LA BÀN ĐỊNH VỊ CUỘC ĐỜI</p>
                     <p>• Số đường đời</p>
                     <p>• Số sứ mệnh</p>
+                    <p>• Số trưởng thành</p>
                     <p>• Số cầu nối</p>
-                    <p style="margin: 0.4in 0; font-weight: bold;">II. HÀNH TRANG VÀO ĐỜI</p>
+                    <p style="margin: 0.4in 0; font-family: 'UTMBold';">II. HÀNH TRANG VÀO ĐỜI</p>
                     <p>• Số ngày sinh</p>
                     <p>• Số khát tâm</p>
                     <p>• Số nhân cách</p>
                     <p>• Đam mê tiềm ẩn</p>
+                    <p>• Bài học cuộc sống</p>
                     <p>• Số suy nghĩ hợp lý</p>
                     <p>• Số cân bằng</p>
-                    <p style="margin: 0.4in 0; font-weight: bold;">III. CHU KỲ CUỘC SỐNG – ĐỈNH CAO & THÁCH THỨC</p>
+                    <p style="margin: 0.4in 0; font-family: 'UTMBold';">III. CHU KỲ CUỘC SỐNG – ĐỈNH CAO & THÁCH THỨC</p>
                     <p>• 3 Chu kỳ sống</p>
                     <p>• 4 đỉnh cao</p>
                     <p>• 4 thách thức</p>
@@ -341,9 +365,9 @@ router.post('/', authentication, async (req, res) => {
                 <div>
                     <h2>Thông tin khách hàng</h2>
                     <div style="font-size: larger; border: 2px dashed #0070C0; border-radius: 30px; display: inline-block; padding: 10px 150px 10px 20px; background-color: #E7E6E6; margin-top: 30px;">
-                        <p>Họ và tên: <span style="text-transform: uppercase; font-weight: bold;">${name}</span></p>
-                        <p>Sinh nhật: <span style="font-weight: bold;">${birthday}</span></p>
-                        <p>Họ và tên: <span style="text-transform: capitalize; font-weight: bold;">${sex}</span></p>
+                        <p>Họ và tên: <span style="text-transform: uppercase; font-family: 'UTMBold';">${name}</span></p>
+                        <p>Sinh nhật: <span style="font-family: 'UTMBold';">${birthday}</span></p>
+                        <p>Họ và tên: <span style="text-transform: capitalize; font-family: 'UTMBold';">${sex}</span></p>
                     </div>
                     <div>
                         <h2 style="text-align: center;">Giới thiệu</h2>
@@ -399,14 +423,16 @@ router.post('/', authentication, async (req, res) => {
                     <p>
                     Con số Đường đời cho bạn một cái nhìn rộng về những cơ hội, thách thức và bài học mà bạn sẽ
                     gặp trong cuộc đời này. Số Đường đời của bạn là thông tin quan trọng nhất có sẵn trong bạn.
-                    </p>                    
+                    </p>
+                </div>
+                <div>
                     <div class="number">
-                        <img src="file:///${projectRoot}/public/img/duongdoi/${
+                            <img classname="setsize" src="file:///${projectRoot}/public/img/duongdoi/${
 				content[0].number
 			}.png">
-                    </div>
-                    ${content[0].content}
-                    ${extendduongdoi}
+                        </div>
+                        ${content[0].content}
+                        ${extendduongdoi}
                 </div>
                 <div>
                     <h2 style="text-align: center;">SỐ SỨ MỆNH</h2>
@@ -435,13 +461,36 @@ sống này. Nhân cách của bạn sẽ xuất hiện dần dần qua thời g
                     Số Sứ mệnh của bạn giúp bạn hiểu được bản chất cơ bản và các khả năng cũng như vấn đề vốn
 có trong bản thể của bạn.
                     </p>
+                </div> 
+                <div>
                     <div class="number">
-                        <img src="file:///${projectRoot}/public/img/sumenh/${
+                    <img classname="setsize" src="file:///${projectRoot}/public/img/sumenh/${
 				content[1].number
 			}.png">
                     </div>
-                    ${content[1].content}
-                </div>                
+                ${content[1].content}
+                </div>
+                <div>
+                    <h2 style="text-align: center;">TRƯỞNG THÀNH</h2>
+                    <p>
+                    Số trưởng thành của bạn cho thấy mong muốn tiềm ẩn dần dần xuất hiện ở độ tuổi từ 30 đến 35. Mục tiêu này bắt đầu xuất hiện khi bạn hiểu rõ hơn về bản thân. Bạn nhận thức rõ hơn về con người bạn, mục tiêu thực sự của bạn trong cuộc sống là gì và bạn muốn đặt hướng đi nào cho cuộc sống của mình. Bạn không còn lãng phí thời gian và năng lượng cho những thứ không thuộc về bản chất của bạn.
+                    </p>
+                    <p>
+                    Bất kể bạn bao nhiêu tuổi, cuộc sống của bạn đang được điều hướng tới một mục tiêu rất cụ thể. Mục tiêu đó có thể được coi là một phần thưởng sau những nỗ lực hiện tại của bạn, thường thì bạn không ý thức được nó.
+                    </p>
+                    <p>
+                    Ảnh hưởng của số trưởng thành có thể xuất hiện từ thời thơ ấu nhưng chúng ta có xu hướng đánh mất chúng sau đó. Nhưng dù thế nào thì nó vẫn tác động đến cuộc sống của bạn mọi lúc.
+                    </p>
+                    <p>
+                    Số trưởng thành của bạn bắt đầu có tác động sâu sắc hơn đến cuộc sống của bạn sau tuổi 35. Ảnh hưởng của số này tăng dần khi bạn già đi.
+                    </p>
+                    <div class="number">
+                        <img classname="setsize" src="file:///${projectRoot}/public/img/truongthanh/${
+				content[23].number
+			}.png">
+                    </div>
+                    ${content[23].content}
+                </div>
                 <div>
                     <h2 style="text-align: center;">CẦU NỐI ĐƯỜNG ĐỜI/SỨ MỆNH</h2>
                     <p>
@@ -511,12 +560,14 @@ hữu, sẽ hữu ích cho bạn trong việc thực hiện Đường đời c�
 người có xu hướng nhìn thấy bạn. Nó cũng cho thấy những đặc điểm bạn đang thể hiện ra với thế
 giới. Số Khát tâm thể hiện bản sắc tâm hồn của bạn.
                 </p>
-                <div class="number">
-                        <img src="file:///${projectRoot}/public/img/khattam/${
+                </div>
+                <div>
+                    <div class="number">
+                            <img classname="setsize" src="file:///${projectRoot}/public/img/khattam/${
 				content[4].number
 			}.png">
-                </div>
-                ${content[4].content}
+                    </div>
+                    ${content[4].content}
                 </div>
                 <div>
                 <h2 style="text-align: center;">NHÂN CÁCH</h2>
@@ -540,7 +591,7 @@ giới. Số Khát tâm thể hiện bản sắc tâm hồn của bạn.
                 cũng gặp khó khăn khi mô tả cách họ nhìn thấy chúng ta.
                 </p>
                 <div class="number">
-                        <img src="file:///${projectRoot}/public/img/nhancach/${
+                        <img classname="setsize" src="file:///${projectRoot}/public/img/nhancach/${
 				content[5].number
 			}.png">
                 </div>
@@ -618,7 +669,7 @@ giới. Số Khát tâm thể hiện bản sắc tâm hồn của bạn.
                 giao tiếp dựa trên phong cách suy nghĩ của những người đó.
                 </p>
                 <div class="number">
-                        <img src="file:///${projectRoot}/public/img/hoply/${
+                        <img classname="setsize" src="file:///${projectRoot}/public/img/hoply/${
 				content[7].number
 			}.png">
                 </div>
@@ -641,7 +692,7 @@ giới. Số Khát tâm thể hiện bản sắc tâm hồn của bạn.
                 huống khi nó đã xuất hiện, số cân bằng sẽ cung cấp cho bạn.                
                 </p>
                 <div class="number">
-                        <img src="file:///${projectRoot}/public/img/canbang/${
+                        <img classname="setsize" src="file:///${projectRoot}/public/img/canbang/${
 				content[8].number
 			}.png">
                 </div>
@@ -672,13 +723,15 @@ giới. Số Khát tâm thể hiện bản sắc tâm hồn của bạn.
                 sự của chúng ta cuối cùng đã có kết quả. Chính trong chu kỳ này, người ta có mức độ thể hiện bản
                 thân và sức ảnh hưởng lớn nhất.
                 </p>                
-                <div class="number" style="margin-top: 100px">
+                <div class="number1" style="margin-top: 100px">
                         <img src="file:///${projectRoot}/public/img/chuky/img.PNG">
-                        <div class="value" style="left: -150px;">${
+                        <div class="value" style="left: -150px; top:24px;">${
 													content[9].number
 												}</div>
-                        <div class="value">${content[10].number}</div>
-                        <div class="value" style="right: -150px;">${
+                        <div class="value" style="top:24px;">${
+													content[10].number
+												}</div>
+                        <div class="value" style="right: -150px; top:24px;">${
 													content[11].number
 												}</div>
                 </div>
@@ -723,49 +776,55 @@ giới. Số Khát tâm thể hiện bản sắc tâm hồn của bạn.
                 cung cấp cho bạn một cảm giác vững chắc hơn nhiều về bản sắc của bạn. Đó là một cửa ngõ cho
                 sự trưởng thành.                
                 </p>
-                <div class="number">
+                <div class="number1">
                         <img src="file:///${projectRoot}/public/img/dinhcao/img.PNG">
-                        <div class="value" style="left: -100px; top: 240px;">${
+                        <div class="value" style="left: -100px; top: 232px;">${
 													content[12].number
 												}</div>
-                        <div class="value" style="left: 100px; top: 240px;">${
+                        <div class="value" style="left: 100px; top: 232px;">${
 													content[13].number
 												}</div>
-                        <div class="value" style="top: 210px;">${
+                        <div class="value" style="top: 202px;">${
 													content[14].number
 												}</div>
                         <div class="value">${content[15].number}</div>
                 </div>
                 </div>
                 <div>
-                <h2 style="text-align: center; margin-bottom:0.05in">ĐỈNH CAO 1: ${
-									content[12].number
-								}</h2>
-                <h2 style="text-align: center; font-size:12pt; margin-top:0in">${
-									result.chukydinhcao[0].start
-								} - ${result.chukydinhcao[0].end}</h2>
-                ${content[12].content}
-                <h2 style="text-align: center; margin-bottom:0.05in">ĐỈNH CAO 2: ${
-									content[13].number
-								}</h2>
-                <h2 style="text-align: center; font-size:12pt; margin-top:0in">${
-									result.chukydinhcao[1].start
-								} - ${result.chukydinhcao[1].end}</h2>
-                ${content[13].content}
-                <h2 style="text-align: center; margin-bottom:0.05in">ĐỈNH CAO 3: ${
-									content[14].number
-								}</h2>
-                <h2 style="text-align: center; font-size:12pt; margin-top:0in">${
-									result.chukydinhcao[2].start
-								} - ${result.chukydinhcao[2].end}</h2>                
-                ${content[14].content}
-                <h2 style="text-align: center; margin-bottom:0.05in">ĐỈNH CAO 4: ${
-									content[15].number
-								}</h2>
-                <h2 style="text-align: center; font-size:12pt; margin-top:0in">${
-									result.chukydinhcao[3].start
-								} - ${result.chukydinhcao[3].end}</h2>                
-                ${content[15].content}
+                    <h2 style="text-align: center; margin-bottom:0.05in">ĐỈNH CAO 1: ${
+											content[12].number
+										}</h2>
+    <h2 style="text-align: center; font-size:12pt; margin-top:0in">${
+			result.chukydinhcao[0].start
+		} - ${result.chukydinhcao[0].end}</h2>
+    ${content[12].content}
+                </div>
+                <div>
+                    <h2 style="text-align: center; margin-bottom:0.05in">ĐỈNH CAO 2: ${
+											content[13].number
+										}</h2>
+    <h2 style="text-align: center; font-size:12pt; margin-top:0in">${
+			result.chukydinhcao[1].start
+		} - ${result.chukydinhcao[1].end}</h2>
+    ${content[13].content}
+                </div>
+                <div>
+                    <h2 style="text-align: center; margin-bottom:0.05in">ĐỈNH CAO 3: ${
+											content[14].number
+										}</h2>
+    <h2 style="text-align: center; font-size:12pt; margin-top:0in">${
+			result.chukydinhcao[2].start
+		} - ${result.chukydinhcao[2].end}</h2>                
+    ${content[14].content}
+                </div>
+                <div>
+                    <h2 style="text-align: center; margin-bottom:0.05in">ĐỈNH CAO 4: ${
+											content[15].number
+										}</h2>
+    <h2 style="text-align: center; font-size:12pt; margin-top:0in">${
+			result.chukydinhcao[3].start
+		} - ${result.chukydinhcao[3].end}</h2>                
+    ${content[15].content}
                 </div>
                 <div>
                 <h2 style="text-align: center;">4 THÁCH THỨC</h2>
@@ -794,15 +853,15 @@ giới. Số Khát tâm thể hiện bản sắc tâm hồn của bạn.
                 <p>
                 Tất cả Thách thức của bạn là có sẵn trong ngày bạn sinh ra.
                 </p>
-                <div class="number" style="margin-top: 50px;">
+                <div class="number1" style="margin-top: 50px;">
                         <img src="file:///${projectRoot}/public/img/thachthuc/img.PNG">
-                        <div class="value" style="left: -80px; top: 3px;">${
+                        <div class="value" style="left: -80px; top: -2px;">${
 													content[16].number
 												}</div>
-                        <div class="value" style="left: 80px; top: 3px;">${
+                        <div class="value" style="left: 80px; top: -2px;">${
 													content[17].number
 												}</div>
-                        <div class="value" style="top: 30px;">${
+                        <div class="value" style="top: 25px;">${
 													content[18].number
 												}</div>
                         <div class="value" style="top: 140px;">${
